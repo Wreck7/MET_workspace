@@ -27,7 +27,7 @@ username_input = input('enter your name: ').capitalize()
 
 if username_input in student_names:
     average = sum(students[username_input]) // len(students[username_input])
-    print(average)
+    # print(average)
     if average >= 60:
         print('passed')
     else:
