@@ -25,5 +25,3 @@ if user in users:
     print(f'welcome, {users[user]}')
 else:
     print('invalid login')
-
-
