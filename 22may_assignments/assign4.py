@@ -18,7 +18,8 @@ def generate_table(number):
 {number} x 9 = {number*9}
 {number} x 10 = {number*10}
 ''')
-    
+
+
 number = int(input('enter a number: '))
 
 generate_table(number)
