@@ -6,8 +6,8 @@ person = {
 
 for k in person:
     if k == 'hobbies':
-        myhobbies = person['hobbies']
-        for i in myhobbies:
+        my_hobbies = person['hobbies']
+        for i in my_hobbies:
             print(i)
 
 
