@@ -3,6 +3,8 @@
 
 numbers = [1,2,3,4,5,6,7]
 
+v = 1
+
 reversed_numbers = []
 
 while len(numbers) > 0:

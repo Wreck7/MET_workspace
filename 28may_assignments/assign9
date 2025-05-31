@@ -1,0 +1,5 @@
+# import assign8
+from assign8 import v
+
+
+print(v)

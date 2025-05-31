@@ -2,6 +2,7 @@
 
 
 numbers = []
+v = 1
 print("Enter 5 numbers:")
 for i in range(5):
     num = int(input(f"Enter number {i+1}: "))
