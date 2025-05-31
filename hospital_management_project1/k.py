@@ -489,4 +489,4 @@ def manage_discharge_process():
         return "Discharge process completed."
     else:
         return "Patient ID not found."
-print(manage_discharge_process())
+# print(manage_discharge_process())
