@@ -100,7 +100,7 @@ def register_patient():
     '''
     else:
         return "Patient ID already exists."
-# print(register_patient())
+print(register_patient())
 
 
 def add_medical_staff():
@@ -126,7 +126,7 @@ def add_medical_staff():
         }
         return "Staff added successfully."
     return "Staff ID already exists."
-# print(add_medical_staff())
+print(add_medical_staff())
 
 
 def schedule_appointment():
@@ -161,6 +161,6 @@ def schedule_appointment():
     }
     hospital_data["appointments"].append(appointment)
     return f"Appointment scheduled successfully with ID {new_id}."
-# print(schedule_appointment())
+print(schedule_appointment())
 
 
