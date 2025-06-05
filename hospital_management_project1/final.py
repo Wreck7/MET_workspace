@@ -70,56 +70,7 @@ hospital_data = {
       "time": "19:00",
       "type": "Surgery Consultation"
     }
-  ],
-    "medical_records": [{
-        "record_id": "1",
-        "patient_id": "1",
-        "doctor_id": "1",
-        "diagnosis": "High Blood Pressure",
-        "treatment": "Low-sodium diet, daily walking",
-        "prescription": "Amlodipine 5mg once daily",
-        "date": "2025-05-28"
-    }],
-    "billing": [],
-    "emergency_cases": [],
-    "medication_inventory": {"MED001": {
-        "quantity": 200,
-        "expiry_date": "2025-12-31",
-        "supplier": "HealthMed Pvt Ltd"
-    },
-    "MED002": {
-        "quantity": 100,
-        "expiry_date": "2026-03-15",
-        "supplier": "PharmaCare Distributors"
-    }},
-    "room_assignments": {"101": {
-        "patient_id": "1",
-        "patient_name": "Ravi Kumar",
-        "room_type": "General",
-        "admission_date": "2025-05-25",
-        "discharge_date": "",
-        "status": "Occupied"
-    },
-    "102": {
-        "patient_id": "",
-        "patient_name": "",
-        "room_type": "Private",
-        "admission_date": "",
-        "discharge_date": "",
-        "status": "Available"
-    },
-    "103": {
-        "patient_id": "",
-        "patient_name": "",
-        "room_type": "General",
-        "admission_date": "",
-        "discharge_date": "",
-        "status": "Available"
-    }},
-    "treatment_costs": {},
-    "reports": [],
-    "discharges": [],
-    "efficiency_metrics": []
+  ]
 }
 
 
@@ -149,7 +100,7 @@ def register_patient():
     '''
     else:
         return "Patient ID already exists."
-# print(register_patient())
+print(register_patient())
 
 
 def add_medical_staff():
@@ -175,7 +126,7 @@ def add_medical_staff():
         }
         return "Staff added successfully."
     return "Staff ID already exists."
-# print(add_medical_staff())
+print(add_medical_staff())
 
 
 def schedule_appointment():
@@ -210,6 +161,6 @@ def schedule_appointment():
     }
     hospital_data["appointments"].append(appointment)
     return f"Appointment scheduled successfully with ID {new_id}."
-# print(schedule_appointment())
+print(schedule_appointment())
 
 
