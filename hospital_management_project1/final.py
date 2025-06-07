@@ -10,16 +10,6 @@ hospital_data = {
             "insurance_name": "HealthSecure Pvt Ltd",
             "insurance_id": "HSPL123456",
         },
-        "2": {
-            "patient_id": "1",
-            "name": "Ravi Kumar",
-            "age": "45",
-            "gender": "Male",
-            "medical_history": ["Diabetes", "Hypertension"],
-            "blood_group": "B+",
-            "insurance_name": "HealthSecure Pvt Ltd",
-            "insurance_id": "HSPL123456",
-        },
     },
     "staff": {
         "1": {
@@ -106,7 +96,7 @@ hospital_data = {
             "room_number": "101A",
             "room_status": "Occupied",
         },
-        "2": {
+        "": {
             "room_type": "Shared",
             "admission_date": "",
             "expected_duration": "",
@@ -123,7 +113,16 @@ hospital_data = {
 }
 
 
-def register_patient(patient_id, name, age, gender, medical_history, blood_group, insurance_name, insurance_id):
+def register_patient(
+    patient_id,
+    name,
+    age,
+    gender,
+    medical_history,
+    blood_group,
+    insurance_name,
+    insurance_id,
+):
     if patient_id not in hospital_data["patients"]:
         hospital_data["patients"][patient_id] = {
             "personal_info": {"name": name, "age": age, "gender": gender},
@@ -131,7 +130,6 @@ def register_patient(patient_id, name, age, gender, medical_history, blood_group
             "blood_group": blood_group,
             "insurance_info": {"provider": insurance_name, "id": insurance_id},
         }
-        # return "Patient registered successfully."
         return f"""
     === PATIENT DASHBOARD ===
     Patient: {name} (ID: {patient_id})
@@ -145,7 +143,9 @@ def register_patient(patient_id, name, age, gender, medical_history, blood_group
 # print(register_patient())
 
 
-def add_medical_staff(staff_id, role, name, specialization, start_time, end_time, phone):
+def add_medical_staff(
+    staff_id, role, name, specialization, start_time, end_time, phone
+):
     if staff_id not in hospital_data["staff"]:
         hospital_data["staff"][staff_id] = {
             "id": staff_id,
@@ -162,7 +162,9 @@ def add_medical_staff(staff_id, role, name, specialization, start_time, end_time
 # print(add_medical_staff())
 
 
-def schedule_appointment(patient_id, doctor_id, appointment_date, appointment_time, appointment_type):
+def schedule_appointment(
+    patient_id, doctor_id, appointment_date, appointment_time, appointment_type
+):
     if patient_id not in hospital_data["patients"]:
         return "Invalid patient ID."
     if doctor_id not in hospital_data["staff"]:
@@ -190,7 +192,9 @@ def schedule_appointment(patient_id, doctor_id, appointment_date, appointment_ti
 # print(schedule_appointment())
 
 
-def create_medical_record(patient_id,doctor_id,diagnosis,treatment,prescription,record_date):
+def create_medical_record(
+    patient_id, doctor_id, diagnosis, treatment, prescription, record_date
+):
     if patient_id not in hospital_data["patients"]:
         return "Patient ID not found."
     if doctor_id not in hospital_data["staff"]:
@@ -213,7 +217,7 @@ def create_medical_record(patient_id,doctor_id,diagnosis,treatment,prescription,
     print(f"Diagnosis    : {record['diagnosis']}")
     print(f"Treatment    : {record['treatment']}")
     print(f"Prescription : {record['prescription']}")
-    print("-"*44)
+    print("-" * 44)
     return f"Medical record created with ID {record_id}."
 
 
@@ -332,15 +336,19 @@ def assign_room(patient_id):
         expected_duration = input("Enter Expected Duration (e.g., 3 days): ")
         room_number = input("Enter Room Number (e.g., 101A): ")
         # room_status = input("Enter Room Status (Occupied/Available): ")
-
-        hospital_data["room_assignments"][patient_id] = {
-            "room_type": room_type,
-            "admission_date": admission_date,
-            "expected_duration": expected_duration,
-            "room_number": room_number,
-            "room_status": 'Occupied',
-        }
-        print(f"\nRoom assigned to patient '{patient_id}' successfully.\n")
+        for i in hospital_data["room_assignments"]:
+            if room_number == hospital_data["room_assignments"][i]['room_number']:
+                if hospital_data["room_assignments"][i]['room_status'] == 'available':
+                    hospital_data["room_assignments"][patient_id] = {
+                    "room_type": room_type,
+                    "admission_date": admission_date,
+                    "expected_duration": expected_duration,
+                    "room_number": room_number,
+                    "room_status": "Occupied",
+                    }
+                    print(f"\nRoom assigned to patient '{patient_id}' successfully.\n")
+                else:
+                    print(f'\nroom no. {room_number} is already occupied.!\n')
     print("Current Room Assignments:")
     print("-" * 50)
     for pid, info in hospital_data["room_assignments"].items():
@@ -371,7 +379,7 @@ def calculate_treatment_cost(patient_id):
         treatment_plan = input(
             f"Enter Treatment Plan ({', '.join(treatment_catalog.keys())}): "
         ).title()
-        
+
         if treatment_plan not in treatment_catalog:
             print("Invalid treatment plan. Skipping this one.")
             continue
@@ -435,7 +443,7 @@ def generate_patient_report(patient_id, report_type):
         "doctor_name": doctor_name,
         "remarks": remarks,
     }
-    hospital_data["reports"].append(report)  # === Formatted Report Output ===
+    hospital_data["reports"].append(report)
     print("\n====== MEDICAL REPORT ======")
     print(f"Report ID     : {report_id}")
     print(f"Report Type   : {report_type}")
@@ -526,11 +534,24 @@ def main():
             name = input("Enter patient name: ").title()
             age = input("Enter age: ")
             gender = input("Enter gender: ").capitalize()
-            medical_history = (input("Enter medical history (comma-separated): ").title().split(","))
+            medical_history = (
+                input("Enter medical history (comma-separated): ").title().split(",")
+            )
             blood_group = input("Enter your blood group: ").upper()
             insurance_name = input("Enter insurance provider: ").title()
             insurance_id = input("Enter insurance id: ")
-            print(register_patient(patient_id, name, age, gender, medical_history, blood_group, insurance_name, insurance_id))
+            print(
+                register_patient(
+                    patient_id,
+                    name,
+                    age,
+                    gender,
+                    medical_history,
+                    blood_group,
+                    insurance_name,
+                    insurance_id,
+                )
+            )
 
         elif choice == "2":
             staff_id = input("Enter staff ID: ")
@@ -540,15 +561,29 @@ def main():
             start_time = input("Enter shift start time: ")
             end_time = input("Enter shift end time: ")
             phone = input("Enter phone number: ")
-            print(add_medical_staff(staff_id, role, name, specialization, start_time, end_time, phone))
+            print(
+                add_medical_staff(
+                    staff_id, role, name, specialization, start_time, end_time, phone
+                )
+            )
 
         elif choice == "3":
             patient_id = input("Enter patient ID: ").strip()
             doctor_id = input("Enter doctor ID: ").strip()
             appointment_date = input("Enter appointment date (YYYY-MM-DD): ").strip()
-            appointment_time = input("Enter appointment time (HH:MM, 24-hour format): ").strip()
+            appointment_time = input(
+                "Enter appointment time (HH:MM, 24-hour format): "
+            ).strip()
             appointment_type = input("Enter appointment type: ").strip().capitalize()
-            print(schedule_appointment(patient_id, doctor_id, appointment_date, appointment_time, appointment_type))
+            print(
+                schedule_appointment(
+                    patient_id,
+                    doctor_id,
+                    appointment_date,
+                    appointment_time,
+                    appointment_type,
+                )
+            )
 
         elif choice == "4":
             patient_id = input("Enter patient ID: ").strip()
@@ -557,7 +592,16 @@ def main():
             treatment = input("Enter treatment: ").capitalize()
             prescription = input("Enter prescription: ").capitalize()
             record_date = input("Enter date of record (YYYY-MM-DD): ").strip()
-            print(create_medical_record(patient_id,doctor_id,diagnosis,treatment,prescription,record_date))
+            print(
+                create_medical_record(
+                    patient_id,
+                    doctor_id,
+                    diagnosis,
+                    treatment,
+                    prescription,
+                    record_date,
+                )
+            )
 
         elif choice == "5":
             print(process_billing())
@@ -566,7 +610,9 @@ def main():
             patient_id = input("Enter patient ID: ")
             emergency_type = input("Enter emergency type: ")
             severity_level = input("Enter severity level: ")
-            print(manage_emergency_admission(patient_id, emergency_type, severity_level))
+            print(
+                manage_emergency_admission(patient_id, emergency_type, severity_level)
+            )
 
         elif choice == "7":
             med_id = input("Enter Medication ID: ")
@@ -592,7 +638,11 @@ def main():
             patient_id = input("Enter patient ID: ").strip()
             discharge_date = input("Enter discharge date (YYYY-MM-DD): ").strip()
             follow_up_instructions = input("Enter follow-up instructions: ").strip()
-            print(manage_discharge_process(patient_id, discharge_date, follow_up_instructions))
+            print(
+                manage_discharge_process(
+                    patient_id, discharge_date, follow_up_instructions
+                )
+            )
 
         elif choice == "13":
             print("Exiting system.")
@@ -600,5 +650,6 @@ def main():
 
         else:
             print("Invalid option. Try again.")
+
 
 main()
