@@ -2,19 +2,19 @@ hospital_data = {
     "patients": {
         "1": {
             "patient_id": "1",
-            "name": "Ravi Kumar",
-            "age": "45",
+            "name": "Harry Potter",
+            "age": "23",
             "gender": "Male",
             "medical_history": ["Diabetes", "Hypertension"],
-            "blood_group": "B+",
-            "insurance_name": "HealthSecure Pvt Ltd",
-            "insurance_id": "HSPL123456",
+            "blood_group": "O+",
+            "insurance_name": "Expert Pvt Ltd",
+            "insurance_id": "HPL7707",
         },
     },
     "staff": {
         "1": {
             "id": "1",
-            "name": "Dr. Alice Sharma",
+            "name": "Dr. Hermoine granger",
             "role": "Doctor",
             "specialization": "General Medicine",
             "phone": "9876543210",
@@ -38,7 +38,7 @@ hospital_data = {
         },
         "4": {
             "id": "4",
-            "name": "Dr. Vikram Rao",
+            "name": "Dr. Ron Weasley",
             "role": "Surgeon",
             "specialization": "Surgery",
             "phone": "9876543213",
