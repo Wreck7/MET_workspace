@@ -15,5 +15,5 @@ def add_medical_staff(
                 "end_time": end_time
             },
         }
-        return "\nStaff added successfully.\n"
-    return "\nStaff ID already exists.\n"
+        return f"\nStaff added successfully with ID: {staff_id}\n"
+    return f"\nStaff ID: {staff_id} already exists.\n"

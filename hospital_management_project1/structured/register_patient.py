@@ -12,6 +12,7 @@ def register_patient(
 ):
     if patient_id not in hospital_data["patients"]:
         hospital_data["patients"][patient_id] = {
+                "patient_id": patient_id,
                 "name": name,
                 "age": age,
                 "gender": gender,

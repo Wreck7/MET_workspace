@@ -10,6 +10,8 @@ from calculate_treatment_cost import calculate_treatment_cost
 from generate_patient_report import generate_patient_report
 from analyze_hospital_efficiency import analyze_hospital_efficiency
 from manage_discharge_process import manage_discharge_process
+from store import hospital_data
+
 
 def main():
     while True:
@@ -30,7 +32,7 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            patient_id = input("Enter patient ID: ")
+            patient_id = f"{len(hospital_data['patients'])+1}"
             name = input("Enter patient name: ").title()
             age = input("Enter age: ")
             gender = input("Enter gender: ").capitalize()
@@ -54,7 +56,7 @@ def main():
             )
 
         elif choice == "2":
-            staff_id = input("Enter staff ID: ")
+            staff_id = f"{len(hospital_data['staff'])+1}"
             role = input("Enter role: ").capitalize()
             name = input("Enter name: ").title()
             specialization = input("Enter specialization: ").capitalize()

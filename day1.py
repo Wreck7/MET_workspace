@@ -2,4 +2,7 @@
 # calculate the average of marks
 #  print the average in integer format
 
+v = {}
 
+
+print(len(v)+1)
