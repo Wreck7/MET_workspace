@@ -1,44 +1,5 @@
 from store import hospital_data
 
-# def assign_room(patient_id):
-#     if patient_id in hospital_data["room_assignments"]:
-#         print(f"\nPatient '{patient_id}' is already assigned a room.\n")
-#     else:
-#         room_type = input("Enter Room Type (Private/Shared): ")
-#         admission_date = input("Enter Admission Date (YYYY-MM-DD): ")
-#         expected_duration = input("Enter Expected Duration (e.g., 3 days): ")
-#         room_number = input("Enter Room Number (e.g., 101A): ")
-#         # room_status = input("Enter Room Status (Occupied/Available): ")
-#         for i in hospital_data["room_assignments"]:
-#             if room_number == hospital_data["room_assignments"][i]['room_number']:
-#                 if hospital_data["room_assignments"][i]['room_status'] == 'available':
-#                     hospital_data["room_assignments"][patient_id] = {
-#                         "room_type": room_type,
-#                         "admission_date": admission_date,
-#                         "expected_duration": expected_duration,
-#                         "room_number": room_number,
-#                         "room_status": "Occupied",
-#                     }
-#                     print(f"\nRoom assigned to patient '{patient_id}' successfully.\n")
-#                     break
-#                 else:
-#                     print(f'\nRoom no. {room_number} is already occupied!\n')
-#                     break
-#         else:
-#             print(f"\nRoom number {room_number} does not exist or is not available.\n")
-#     print("Current Room Assignments:")
-#     print("-" * 50)
-#     for pid, info in hospital_data["room_assignments"].items():
-#         print(f"Patient ID         : {pid}")
-#         print(f"  Room Type        : {info['room_type']}")
-#         print(f"  Admission Date   : {info['admission_date']}")
-#         print(f"  Expected Duration: {info['expected_duration']}")
-#         print(f"  Room Number      : {info['room_number']}")
-#         print(f"  Room Status      : {info['room_status']}")
-#         print("-" * 50)
-
-
-
 def assign_room(patient_id):
     # First check if patient exists in hospital registration
     if patient_id not in hospital_data["patients"]:

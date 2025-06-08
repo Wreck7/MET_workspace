@@ -105,8 +105,9 @@ hospital_data = {
         },
     },
     "treatment_costs": {
-        "pat001": [{"treatment": "Surgery", "cost": 4500, "insurance": "10% off"}]
+        "1": [{"treatment": "Surgery", "cost": 4500, "insurance": "10% off"}]
     },
     "reports": [],
+    # "efficiency_metrics": [],
     "discharges": [],
 }

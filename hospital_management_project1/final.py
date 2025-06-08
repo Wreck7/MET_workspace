@@ -75,13 +75,13 @@ hospital_data = {
     "billing": [],
     "emergency_cases": [],
     "inventory": {
-        "m01": {
+        "m1": {
             "name": "Paracetamol",
             "quantity": 100,
             "expiry": "2025-12-31",
             "supplier": "MediCorp",
         },
-        "m02": {
+        "m2": {
             "name": "Amoxicillin",
             "quantity": 50,
             "expiry": "2024-11-15",
@@ -89,18 +89,18 @@ hospital_data = {
         },
     },
     "room_assignments": {
-        "1": {
+        "101A": {
             "room_type": "Private",
             "admission_date": "2025-05-01",
             "expected_duration": "5 days",
-            "room_number": "101A",
+            "patient": "1",
             "room_status": "Occupied",
         },
-        "": {
+        "202B": {
             "room_type": "Shared",
             "admission_date": "",
             "expected_duration": "",
-            "room_number": "202B",
+            "patient": "",
             "room_status": "available",
         },
     },
@@ -125,17 +125,20 @@ def register_patient(
 ):
     if patient_id not in hospital_data["patients"]:
         hospital_data["patients"][patient_id] = {
-            "personal_info": {"name": name, "age": age, "gender": gender},
+            "patient_id": patient_id,
+            "name": name,
+            "age": age,
+            "gender": gender,
             "medical_history": medical_history,
             "blood_group": blood_group,
             "insurance_info": {"provider": insurance_name, "id": insurance_id},
         }
         return f"""
-    === PATIENT DASHBOARD ===
-    Patient: {name} (ID: {patient_id})
-    Age: {age} | Gender: {gender} | Blood Type: {blood_group}
-    Insurance: {insurance_name} (Policy: {insurance_id})
-    """
+=== PATIENT DASHBOARD ===
+Patient: {name} (ID: {patient_id})
+Age: {age} | Gender: {gender} | Blood Type: {blood_group}
+Insurance: {insurance_name} (Policy: {insurance_id})
+"""
     else:
         return "Patient ID already exists."
 
@@ -155,8 +158,8 @@ def add_medical_staff(
             "phone": phone,
             "shift_schedule": {"start_time": start_time, "end_time": end_time},
         }
-        return "Staff added successfully."
-    return "Staff ID already exists."
+        return f"\nStaff added successfully with ID: {staff_id}\n"
+    return f"\nStaff ID: {staff_id} already exists.\n"
 
 
 # print(add_medical_staff())
@@ -166,16 +169,18 @@ def schedule_appointment(
     patient_id, doctor_id, appointment_date, appointment_time, appointment_type
 ):
     if patient_id not in hospital_data["patients"]:
-        return "Invalid patient ID."
+        return "\nInvalid patient ID.\n"
     if doctor_id not in hospital_data["staff"]:
-        return "Invalid doctor ID."
+        return "\nInvalid doctor ID.\n"
+
     for a in hospital_data["appointments"]:
         if (
             a["doctor_id"] == doctor_id
             and a["date"] == appointment_date
             and a["time"] == appointment_time
         ):
-            return f"Conflict: Doctor already has an appointment at {appointment_time} on {appointment_date}."
+            return f"\nConflict: Doctor already has an appointment at {appointment_time} on {appointment_date}.\n"
+
     new_id = str(len(hospital_data["appointments"]) + 1)
     appointment = {
         "id": new_id,
@@ -186,7 +191,7 @@ def schedule_appointment(
         "type": appointment_type,
     }
     hospital_data["appointments"].append(appointment)
-    return f"Appointment scheduled successfully with ID {new_id}."
+    return f"\nAppointment scheduled successfully with ID {new_id}.\n"
 
 
 # print(schedule_appointment())
@@ -199,6 +204,7 @@ def create_medical_record(
         return "Patient ID not found."
     if doctor_id not in hospital_data["staff"]:
         return "Doctor ID not found."
+
     record_id = str(len(hospital_data["medical_records"]) + 1)
     record = {
         "record_id": record_id,
@@ -210,8 +216,10 @@ def create_medical_record(
         "date": record_date,
     }
     hospital_data["medical_records"].append(record)
+
     print("\n✅ Medical record added successfully!")
     print("------------- Medical Record --------------")
+    print(f"Date         : {record['date']}")
     print(f"Patient ID   : {record['patient_id']}")
     print(f"Doctor ID    : {record['doctor_id']}")
     print(f"Diagnosis    : {record['diagnosis']}")
@@ -228,11 +236,13 @@ def process_billing():
     patient_id = input("Enter patient ID: ").strip()
     if patient_id not in hospital_data["patients"]:
         return "Patient ID not found."
+
     patient = hospital_data["patients"][patient_id]
     patient_name = patient["name"]
     admission_date = input("Enter admission date (e.g., March 15, 2025): ").strip()
     discharge_date = input("Enter discharge date (e.g., March 18, 2025): ").strip()
     num_services = int(input("How many services do you want to enter? "))
+
     services = []
     total_cost = 0
 
@@ -260,7 +270,8 @@ def process_billing():
     }
     hospital_data["billing"].append(billing_info)
 
-    print("\n=== BILLING SUMMARY ===")
+    print("-" * 40)
+    print("\n=== BILLING SUMMARY ===\n")
     print("Patient:", patient_name)
     print("Admission Date:", admission_date)
     print("Discharge Date:", discharge_date)
@@ -270,7 +281,8 @@ def process_billing():
     print(f"Total Cost: ₹{total_cost}")
     print(f"Insurance Coverage: {insurance_coverage}%")
     print(f"Final Amount Payable: ₹{final_cost}")
-    print("-" * 50)
+    print("-" * 40)
+
     return "Billing processed successfully."
 
 
@@ -278,16 +290,35 @@ def process_billing():
 
 
 def manage_emergency_admission(patient_id, emergency_type, severity_level):
+    def create_emergency_record():
+        if int(severity_level) >= 4:
+            emergency = {
+                "patient_id": patient_id,
+                "type": emergency_type,
+                "severity": severity_level,
+            }
+            return emergency, True
+        else:
+            return None, False
+
     if patient_id in hospital_data["patients"]:
-        emergency = {
-            "patient_id": patient_id,
-            "type": emergency_type,
-            "severity": severity_level,
-        }
-        hospital_data["emergency_cases"].append(emergency)
-        return f"\nEmergency case recorded. Patient ID: {patient_id}\n"
+        emergency_data, is_emergency = create_emergency_record()
+        if is_emergency:
+            hospital_data["emergency_cases"].append(emergency_data)
+            return f"\nEmergency case recorded. Patient ID: {patient_id}\n"
+        else:
+            return f"\nPatient ID {patient_id}: Severity level {severity_level} does not qualify for emergency classification.\n"
     else:
-        return "Patient ID not found."
+        emergency_data, is_emergency = create_emergency_record()
+        if is_emergency:
+            registration_result = registration()
+            new_patient_id = str(len(hospital_data["patients"]))
+            emergency_data["patient_id"] = new_patient_id
+            hospital_data["emergency_cases"].append(emergency_data)
+            return f"Patient registered and emergency case recorded. New Patient ID: {new_patient_id}\n"
+        else:
+            registration_result = registration()
+            return f"\nPatient ID {patient_id}: Severity level {severity_level} does not qualify for emergency classification. Patient registered through standard procedures.\n"
 
 
 # print(manage_emergency_admission())
@@ -295,14 +326,16 @@ def manage_emergency_admission(patient_id, emergency_type, severity_level):
 
 def track_medication_inventory(med_id):
     if med_id in hospital_data["inventory"]:
-        print(f"\nMedication '{med_id}' already exists in the inventory.")
+        print(
+            f"\nMedication '{med_id}': {hospital_data["inventory"][med_id]["name"]} already exists in the inventory."
+        )
         add_qty = int(input("Enter quantity to add: "))
         hospital_data["inventory"][med_id]["quantity"] += add_qty
         print(
-            f"Updated quantity for '{med_id}' is now {hospital_data['inventory'][med_id]['quantity']}.\n"
+            f"Updated quantity for '{med_id}': {hospital_data["inventory"][med_id]["name"]} is now {hospital_data['inventory'][med_id]['quantity']}.\n"
         )
     else:
-        name = input("Enter Medication Name: ")
+        name = input("Enter Medication Name: ").title()
         quantity = int(input("Enter Quantity: "))
         expiry = input("Enter Expiry Date (YYYY-MM-DD): ")
         supplier = input("Enter Supplier Name: ")
@@ -313,6 +346,7 @@ def track_medication_inventory(med_id):
             "supplier": supplier,
         }
         print(f"\nMedication '{med_id}' added successfully.\n")
+
     print("Current Medication Inventory:")
     print("-" * 50)
     for med, info in hospital_data["inventory"].items():
@@ -328,38 +362,54 @@ def track_medication_inventory(med_id):
 
 
 def assign_room(patient_id):
-    if patient_id in hospital_data["room_assignments"]:
-        print(f"\nPatient '{patient_id}' is already assigned a room.\n")
+    if patient_id not in hospital_data["patients"]:
+        print(f"\nPatient '{patient_id}' is not registered in the hospital system.\n")
+        return
+    for room_num, info in hospital_data["room_assignments"].items():
+        if info["patient"] == patient_id:
+            print(f"\nPatient '{patient_id}' is already assigned to room {room_num}.\n")
+            break
     else:
+        patient_name = hospital_data["patients"][patient_id]['name']
+        print(f"\nAssigning room for patient: {patient_name} (ID: {patient_id})")
+        
         room_type = input("Enter Room Type (Private/Shared): ")
         admission_date = input("Enter Admission Date (YYYY-MM-DD): ")
         expected_duration = input("Enter Expected Duration (e.g., 3 days): ")
         room_number = input("Enter Room Number (e.g., 101A): ")
-        # room_status = input("Enter Room Status (Occupied/Available): ")
-        for i in hospital_data["room_assignments"]:
-            if room_number == hospital_data["room_assignments"][i]['room_number']:
-                if hospital_data["room_assignments"][i]['room_status'] == 'available':
-                    hospital_data["room_assignments"][patient_id] = {
+
+        if room_number in hospital_data["room_assignments"]:
+            if hospital_data["room_assignments"][room_number]['room_status'] == 'available':
+                hospital_data["room_assignments"][room_number] = {
                     "room_type": room_type,
                     "admission_date": admission_date,
                     "expected_duration": expected_duration,
-                    "room_number": room_number,
+                    "patient": patient_id,
                     "room_status": "Occupied",
-                    }
-                    print(f"\nRoom assigned to patient '{patient_id}' successfully.\n")
-                else:
-                    print(f'\nroom no. {room_number} is already occupied.!\n')
+                }
+                print(f"\nRoom {room_number} assigned to patient '{patient_name}' (ID: {patient_id}) successfully.\n")
+            else:
+                print(f'\nRoom no. {room_number} is already occupied!\n')
+        else:
+            print(f"\nRoom number {room_number} does not exist or is not available.\n")
+    
     print("Current Room Assignments:")
     print("-" * 50)
-    for pid, info in hospital_data["room_assignments"].items():
-        print(f"Patient ID         : {pid}")
+    for room_num, info in hospital_data["room_assignments"].items():
+        patient_info = ""
+        if info["patient"]:
+            patient_name = hospital_data["patients"].get(info["patient"])['name']
+            patient_info = f"{info['patient']} ({patient_name})"
+        else:
+            patient_info = info["patient"]
+            
+        print(f"Room Number        : {room_num}")
         print(f"  Room Type        : {info['room_type']}")
         print(f"  Admission Date   : {info['admission_date']}")
         print(f"  Expected Duration: {info['expected_duration']}")
-        print(f"  Room Number      : {info['room_number']}")
+        print(f"  Patient          : {patient_info}")
         print(f"  Room Status      : {info['room_status']}")
         print("-" * 50)
-
 
 # assign_room()
 
@@ -401,11 +451,11 @@ def calculate_treatment_cost(patient_id):
     print("-" * 50)
     for pid, treatments in hospital_data["treatment_costs"].items():
         print(f"Patient ID: {pid}")
-        for i, info in enumerate(treatments, 1):
-            print(f"  Treatment {i}:")
-            print(f"    Plan      : {info['treatment']}")
-            print(f"    Final Cost: ${info['cost']}")
-            print(f"    Insurance : {info['insurance']}")
+        for i in range(len(treatments)):
+            print(f"  Treatment {i+1}:")
+            print(f"    Plan      : {treatments[i]['treatment']}")
+            print(f"    Final Cost: ${treatments[i]['cost']}")
+            print(f"    Insurance : {treatments[i]['insurance']}")
         print("-" * 50)
 
 
@@ -511,6 +561,31 @@ def manage_discharge_process(patient_id, discharge_date, follow_up_instructions)
 # print(manage_discharge_process())
 
 
+def registration():
+    patient_id = f"{len(hospital_data['patients'])+1}"
+    name = input("Enter patient name: ").title()
+    age = input("Enter age: ")
+    gender = input("Enter gender: ").capitalize()
+    medical_history = (
+        input("Enter medical history (comma-separated): ").title().split(",")
+    )
+    blood_group = input("Enter your blood group: ").upper()
+    insurance_name = input("Enter insurance provider: ").title()
+    insurance_id = input("Enter insurance id: ")
+    print(
+        register_patient(
+            patient_id,
+            name,
+            age,
+            gender,
+            medical_history,
+            blood_group,
+            insurance_name,
+            insurance_id,
+        )
+    )
+
+
 def main():
     while True:
         print("\n=== Hospital Management System ===")
@@ -530,31 +605,10 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            patient_id = input("Enter patient ID: ")
-            name = input("Enter patient name: ").title()
-            age = input("Enter age: ")
-            gender = input("Enter gender: ").capitalize()
-            medical_history = (
-                input("Enter medical history (comma-separated): ").title().split(",")
-            )
-            blood_group = input("Enter your blood group: ").upper()
-            insurance_name = input("Enter insurance provider: ").title()
-            insurance_id = input("Enter insurance id: ")
-            print(
-                register_patient(
-                    patient_id,
-                    name,
-                    age,
-                    gender,
-                    medical_history,
-                    blood_group,
-                    insurance_name,
-                    insurance_id,
-                )
-            )
+            registration()
 
         elif choice == "2":
-            staff_id = input("Enter staff ID: ")
+            staff_id = f"{len(hospital_data['staff'])+1}"
             role = input("Enter role: ").capitalize()
             name = input("Enter name: ").title()
             specialization = input("Enter specialization: ").capitalize()

@@ -37,8 +37,8 @@ def process_billing():
         "final_cost": final_cost,
     }
     hospital_data["billing"].append(billing_info)
-
-    print("\n=== BILLING SUMMARY ===")
+    print("-" * 40)
+    print("\n=== BILLING SUMMARY ===\n")
     print("Patient:", patient_name)
     print("Admission Date:", admission_date)
     print("Discharge Date:", discharge_date)
@@ -48,6 +48,6 @@ def process_billing():
     print(f"Total Cost: ₹{total_cost}")
     print(f"Insurance Coverage: {insurance_coverage}%")
     print(f"Final Amount Payable: ₹{final_cost}")
-    print("-" * 50)
+    print("-" * 40)
 
     return "Billing processed successfully."

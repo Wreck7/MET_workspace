@@ -22,6 +22,7 @@ def create_medical_record(
 
     print("\n✅ Medical record added successfully!")
     print("------------- Medical Record --------------")
+    print(f"Date         : {record['date']}")
     print(f"Patient ID   : {record['patient_id']}")
     print(f"Doctor ID    : {record['doctor_id']}")
     print(f"Diagnosis    : {record['diagnosis']}")

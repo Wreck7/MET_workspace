@@ -38,9 +38,9 @@ def calculate_treatment_cost(patient_id):
     print("-" * 50)
     for pid, treatments in hospital_data["treatment_costs"].items():
         print(f"Patient ID: {pid}")
-        for i, info in enumerate(treatments, 1):
-            print(f"  Treatment {i}:")
-            print(f"    Plan      : {info['treatment']}")
-            print(f"    Final Cost: ${info['cost']}")
-            print(f"    Insurance : {info['insurance']}")
+        for i in range(len(treatments)):
+            print(f"  Treatment {i+1}:")
+            print(f"    Plan      : {treatments[i]['treatment']}")
+            print(f"    Final Cost: ${treatments[i]['cost']}")
+            print(f"    Insurance : {treatments[i]['insurance']}")
         print("-" * 50)

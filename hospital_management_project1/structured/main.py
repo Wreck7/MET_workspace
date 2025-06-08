@@ -11,6 +11,7 @@ from generate_patient_report import generate_patient_report
 from analyze_hospital_efficiency import analyze_hospital_efficiency
 from manage_discharge_process import manage_discharge_process
 from store import hospital_data
+from registration import registration
 
 
 def main():
@@ -32,28 +33,7 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            patient_id = f"{len(hospital_data['patients'])+1}"
-            name = input("Enter patient name: ").title()
-            age = input("Enter age: ")
-            gender = input("Enter gender: ").capitalize()
-            medical_history = (
-                input("Enter medical history (comma-separated): ").title().split(",")
-            )
-            blood_group = input("Enter your blood group: ").upper()
-            insurance_name = input("Enter insurance provider: ").title()
-            insurance_id = input("Enter insurance id: ")
-            print(
-                register_patient(
-                    patient_id,
-                    name,
-                    age,
-                    gender,
-                    medical_history,
-                    blood_group,
-                    insurance_name,
-                    insurance_id,
-                )
-            )
+            registration()
 
         elif choice == "2":
             staff_id = f"{len(hospital_data['staff'])+1}"
