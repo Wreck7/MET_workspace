@@ -16,4 +16,3 @@ def add_medical_staff(
             },
         }
         return f"\nStaff added successfully with ID: {staff_id}\n"
-    return f"\nStaff ID: {staff_id} already exists.\n"

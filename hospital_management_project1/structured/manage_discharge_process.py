@@ -22,7 +22,7 @@ def manage_discharge_process(patient_id, discharge_date, follow_up_instructions)
         print(f"Patient name     : {hospital_data['patients'][patient_id]['name']}")
         print(f"Discharge Date   : {discharge_date}")
         print(f"Follow-up        : {follow_up_instructions}")
-        print("Room status      : Updated to 'Available'")
+        print("Room status       : Updated to 'Available'")
         print("==========================\n")
         return "Discharge process completed.\n"
     else:

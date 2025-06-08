@@ -29,5 +29,4 @@ Patient: {name} (ID: {patient_id})
 Age: {age} | Gender: {gender} | Blood Type: {blood_group}
 Insurance: {insurance_name} (Policy: {insurance_id})
 """
-    else:
-        return "Patient ID already exists."
+

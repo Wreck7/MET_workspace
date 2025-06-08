@@ -7,12 +7,10 @@ def registration():
     name = input("Enter patient name: ").title()
     age = input("Enter age: ")
     gender = input("Enter gender: ").capitalize()
-    medical_history = (
-        input("Enter medical history (comma-separated): ").title().split(",")
-    )
+    medical_history = input("Enter medical history (comma-separated): ").title().split(",")
     blood_group = input("Enter your blood group: ").upper()
     insurance_name = input("Enter insurance provider: ").title()
-    insurance_id = input("Enter insurance id: ")
+    insurance_id = input("Enter insurance id: ").upper()
     print(
         register_patient(
             patient_id,

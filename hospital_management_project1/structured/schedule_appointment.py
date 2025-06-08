@@ -26,4 +26,10 @@ def schedule_appointment(
         "type": appointment_type,
     }
     hospital_data["appointments"].append(appointment)
+    print("\n","-" * 40)
+    print(f"Appointment #{appointment['id']}")
+    print(f"Patient: {appointment['patient_id']} | Doctor: {appointment['doctor_id']}")
+    print(f"Date: {appointment['date']} at {appointment['time']}")
+    print(f"Type: {appointment['type']}")
+    print("-" * 40)
     return f"\nAppointment scheduled successfully with ID {new_id}.\n"

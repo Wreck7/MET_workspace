@@ -72,7 +72,7 @@ hospital_data = {
             "date": "2025-05-28",
         }
     ],
-    "billing": [],
+    "billing": {},
     "emergency_cases": [],
     "inventory": {
         "m1": {
