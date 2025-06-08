@@ -1,53 +1,81 @@
 from store import hospital_data
 
-def process_billing():
-    patient_id = input("Enter patient ID: ").strip()
-    if patient_id not in hospital_data["patients"]:
-        return "Patient ID not found."
 
-    patient = hospital_data["patients"][patient_id]
-    patient_name = patient["name"]
-    admission_date = input("Enter admission date (e.g., March 15, 2025): ").strip()
-    discharge_date = input("Enter discharge date (e.g., March 18, 2025): ").strip()
-    num_services = int(input("How many services do you want to enter? "))
+def process_billing(patient_id):
+    if patient_id not in hospital_data.get("patients", {}):
+        print(f"Patient ID {patient_id} not found in the system.")
+        return
+    
+    if patient_id not in hospital_data.get("treatment_costs", {}):
+        print(f"\nNo treatment costs found for Patient ID: {patient_id}")
+        print("Please add treatment costs first using the treatment cost")
+        return
+    patient_info = hospital_data["patients"][patient_id]
+    treatments = hospital_data["treatment_costs"][patient_id]
 
-    services = []
-    total_cost = 0
+    total_treatment_cost = 0
+    for treatment in treatments:
+        total_treatment_cost += treatment["cost"]
 
-    for i in range(num_services):
-        desc = input(f"Enter description for service {i+1}: ").strip().capitalize()
-        cost_str = input(f"Enter cost for '{desc}': ").strip()
-        cost = float(cost_str)
-        services.append({"description": desc, "cost": cost})
-        total_cost += cost
-
-    insurance_str = input("Enter insurance coverage percentage (e.g., 10): ").strip()
-    insurance_coverage = float(insurance_str)
-    discount = (insurance_coverage / 100) * total_cost
-    final_cost = total_cost - discount
-
-    billing_info = {
-        "patient_id": patient_id,
-        "patient_name": patient_name,
-        "admission_date": admission_date,
-        "discharge_date": discharge_date,
-        "services": services,
-        "total_cost": total_cost,
-        "insurance_coverage": insurance_coverage,
-        "final_cost": final_cost,
+    additional_charges = {
+        "Room Charges": 0,
+        "Pharmacy": 0,
+        "Lab Fees": 0,
+        "Administrative Fee": 50
     }
-    hospital_data["billing"].append(billing_info)
-    print("-" * 40)
-    print("\n=== BILLING SUMMARY ===\n")
-    print("Patient:", patient_name)
-    print("Admission Date:", admission_date)
-    print("Discharge Date:", discharge_date)
-    print("Service Charges:")
-    for service in services:
-        print(f"{service['description']}: ₹{service['cost']}")
-    print(f"Total Cost: ₹{total_cost}")
-    print(f"Insurance Coverage: {insurance_coverage}%")
-    print(f"Final Amount Payable: ₹{final_cost}")
-    print("-" * 40)
-
-    return "Billing processed successfully."
+    print(f"\n=== Processing Bill for Patient: {patient_info['name']} ===")
+    print(f"Patient ID: {patient_id}")
+    date = input("Enter current date (YYYY-MM-DD): ").strip()
+    add_extra = input("\nDo you want to add additional charges? (y/n): ").lower()
+    if add_extra == 'y':
+        for charge_type in ["Room Charges", "Pharmacy", "Lab Fees"]:
+            amount = float(input(f"Enter {charge_type} amount (0 if none): $"))
+            additional_charges[charge_type] += amount
+    total_additional = sum(additional_charges.values())
+    grand_total = total_treatment_cost + total_additional
+    
+    print("\n" + "="*50)
+    print("                    HOSPITAL BILL")
+    print("="*50)
+    print(f"Patient Name: {patient_info['name']}")
+    print(f"Patient ID  : {patient_id}")
+    print(f"Phone       : {patient_info.get('age', 'N/A')}")
+    print(f"Address     : {patient_info.get('gender', 'N/A')}")
+    print("-"*50)
+    print("TREATMENT COSTS:")
+    print("-"*50)
+    i = 1
+    for treatment in treatments:
+        print(f"{i}. {treatment['treatment']} ${treatment['cost']}")
+        print(f"   Insurance: {treatment['insurance']}")
+        i += 1
+    print(f"Subtotal (Treatments): ${total_treatment_cost}")
+    print("-"*50)
+    print("ADDITIONAL CHARGES:")
+    print("-"*50)
+    for charge_type, amount in additional_charges.items():
+        if amount > 0:
+            print(f"{charge_type} ${amount}")
+    print(f"Subtotal (Additional): ${total_additional}")
+    print("="*50)
+    print(f"GRAND TOTAL: ${grand_total}")
+    print("="*50)
+    
+    if "billing_records" not in hospital_data:
+        hospital_data["billing_records"] = {}
+    
+    billing_record = {
+        "patient_id": patient_id,
+        "patient_name": patient_info['name'],
+        "treatments": treatments.copy(),
+        "additional_charges": additional_charges.copy(),
+        "total_treatment_cost": total_treatment_cost,
+        "total_additional_cost": total_additional,
+        "grand_total": grand_total,
+        "billing_date": date
+    }
+    
+    hospital_data["billing_records"][patient_id] = billing_record
+    
+    print(f"\nBilling record saved for Patient ID: {patient_id}")
+    

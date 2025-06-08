@@ -86,7 +86,9 @@ def main():
             )
 
         elif choice == "5":
-            print(process_billing())
+            patient_id = input("Enter patient ID: ").strip()
+            
+            process_billing(patient_id)
 
         elif choice == "6":
             patient_id = input("Enter patient ID: ")

@@ -232,58 +232,80 @@ def create_medical_record(
 # print(create_medical_record())
 
 
-def process_billing():
-    patient_id = input("Enter patient ID: ").strip()
-    if patient_id not in hospital_data["patients"]:
-        return "Patient ID not found."
+def process_billing(patient_id):
+    if patient_id not in hospital_data.get("patients", {}):
+        print(f"Patient ID {patient_id} not found in the system.")
+        return
+    
+    if patient_id not in hospital_data.get("treatment_costs", {}):
+        print(f"\nNo treatment costs found for Patient ID: {patient_id}")
+        print("Please add treatment costs first using the treatment cost")
+        return
+    patient_info = hospital_data["patients"][patient_id]
+    treatments = hospital_data["treatment_costs"][patient_id]
 
-    patient = hospital_data["patients"][patient_id]
-    patient_name = patient["name"]
-    admission_date = input("Enter admission date (e.g., March 15, 2025): ").strip()
-    discharge_date = input("Enter discharge date (e.g., March 18, 2025): ").strip()
-    num_services = int(input("How many services do you want to enter? "))
+    total_treatment_cost = 0
+    for treatment in treatments:
+        total_treatment_cost += treatment["cost"]
 
-    services = []
-    total_cost = 0
-
-    for i in range(num_services):
-        desc = input(f"Enter description for service {i+1}: ").strip().capitalize()
-        cost_str = input(f"Enter cost for '{desc}': ").strip()
-        cost = float(cost_str)
-        services.append({"description": desc, "cost": cost})
-        total_cost += cost
-
-    insurance_str = input("Enter insurance coverage percentage (e.g., 10): ").strip()
-    insurance_coverage = float(insurance_str)
-    discount = (insurance_coverage / 100) * total_cost
-    final_cost = total_cost - discount
-
-    billing_info = {
-        "patient_id": patient_id,
-        "patient_name": patient_name,
-        "admission_date": admission_date,
-        "discharge_date": discharge_date,
-        "services": services,
-        "total_cost": total_cost,
-        "insurance_coverage": insurance_coverage,
-        "final_cost": final_cost,
+    additional_charges = {
+        "Room Charges": 0,
+        "Pharmacy": 0,
+        "Lab Fees": 0,
+        "Administrative Fee": 50
     }
-    hospital_data["billing"].append(billing_info)
-
-    print("-" * 40)
-    print("\n=== BILLING SUMMARY ===\n")
-    print("Patient:", patient_name)
-    print("Admission Date:", admission_date)
-    print("Discharge Date:", discharge_date)
-    print("Service Charges:")
-    for service in services:
-        print(f"{service['description']}: ₹{service['cost']}")
-    print(f"Total Cost: ₹{total_cost}")
-    print(f"Insurance Coverage: {insurance_coverage}%")
-    print(f"Final Amount Payable: ₹{final_cost}")
-    print("-" * 40)
-
-    return "Billing processed successfully."
+    print(f"\n=== Processing Bill for Patient: {patient_info['name']} ===")
+    print(f"Patient ID: {patient_id}")
+    date = input("Enter current date (YYYY-MM-DD): ").strip()
+    add_extra = input("\nDo you want to add additional charges? (y/n): ").lower()
+    if add_extra == 'y':
+        for charge_type in ["Room Charges", "Pharmacy", "Lab Fees"]:
+            amount = float(input(f"Enter {charge_type} amount (0 if none): $"))
+            additional_charges[charge_type] += amount
+    total_additional = sum(additional_charges.values())
+    grand_total = total_treatment_cost + total_additional
+    
+    print("\n" + "="*50)
+    print("                    HOSPITAL BILL")
+    print("="*50)
+    print(f"Patient Name: {patient_info['name']}")
+    print(f"Patient ID  : {patient_id}")
+    print(f"Phone       : {patient_info.get('age', 'N/A')}")
+    print(f"Address     : {patient_info.get('gender', 'N/A')}")
+    print("-"*50)
+    print("TREATMENT COSTS:")
+    print("-"*50)
+    i = 1
+    for treatment in treatments:
+        print(f"{i}. {treatment['treatment']} ${treatment['cost']}")
+        print(f"   Insurance: {treatment['insurance']}")
+        i += 1
+    print(f"Subtotal (Treatments): ${total_treatment_cost}")
+    print("-"*50)
+    print("ADDITIONAL CHARGES:")
+    print("-"*50)
+    for charge_type, amount in additional_charges.items():
+        if amount > 0:
+            print(f"{charge_type} ${amount}")
+    print(f"Subtotal (Additional): ${total_additional}")
+    print("="*50)
+    print(f"GRAND TOTAL: ${grand_total}")
+    print("="*50)
+    
+    if "billing_records" not in hospital_data:
+        hospital_data["billing_records"] = {}
+    billing_record = {
+        "patient_id": patient_id,
+        "patient_name": patient_info['name'],
+        "treatments": treatments.copy(),
+        "additional_charges": additional_charges.copy(),
+        "total_treatment_cost": total_treatment_cost,
+        "total_additional_cost": total_additional,
+        "grand_total": grand_total,
+        "billing_date": date
+    }
+    hospital_data["billing_records"][patient_id] = billing_record
+    print(f"\nBilling record saved for Patient ID: {patient_id}")
 
 
 # print(process_billing())
@@ -420,10 +442,19 @@ def calculate_treatment_cost(patient_id):
         "Surgery": 5000,
         "Physiotherapy": 300,
         "Dental Care": 200,
+        "X-Ray": 150,
+        "Blood Test": 80,
+        "Consultation": 120,
+        "Vaccination": 75,
+        "Prescription": 50,
+        "Emergency Care": 500,
     }
+
     num_treatments = int(input("How many treatments to add? "))
-    if patient_id not in hospital_data["treatment_costs"]:
-        hospital_data["treatment_costs"][patient_id] = []
+    treatments = []
+    total_base_cost = 0
+
+    # Collect all treatments first
     for i in range(num_treatments):
         print(f"\nEntering treatment {i + 1} of {num_treatments}")
         treatment_plan = input(
@@ -433,29 +464,54 @@ def calculate_treatment_cost(patient_id):
         if treatment_plan not in treatment_catalog:
             print("Invalid treatment plan. Skipping this one.")
             continue
+
         base_cost = treatment_catalog[treatment_plan]
-        discount_percent = float(
-            input("Enter Insurance Discount (%) [e.g., 10 for 10%]: ")
+        treatments.append({"treatment": treatment_plan, "base_cost": base_cost})
+        total_base_cost += base_cost
+
+    # Apply single insurance discount to total
+    discount_percent = float(
+        input(
+            f"\nTotal cost before insurance: ${total_base_cost}\n"
+            "Enter Insurance Discount (%) [e.g., 10 for 10%]: "
         )
-        discount_amount = base_cost * (discount_percent / 100)
-        final_cost = base_cost - discount_amount
+    )
+
+    discount_amount = total_base_cost * (discount_percent / 100)
+    total_final_cost = total_base_cost - discount_amount
+
+    # Calculate proportional cost for each treatment
+    if patient_id not in hospital_data["treatment_costs"]:
+        hospital_data["treatment_costs"][patient_id] = []
+
+    for treatment in treatments:
+        # Calculate this treatment's share of the total final cost
+        proportion = treatment["base_cost"] / total_base_cost
+        treatment_final_cost = total_final_cost * proportion
 
         treatment_record = {
-            "treatment": treatment_plan,
-            "cost": round(final_cost, 2),
-            "insurance": f"{discount_percent}% off",
+            "treatment": treatment["treatment"],
+            "cost": round(treatment_final_cost, 2),
+            "insurance": f"{discount_percent}% off total",
         }
         hospital_data["treatment_costs"][patient_id].append(treatment_record)
-        print("Treatment added.\n")
+
+    print(f"\nTreatments added successfully!")
+    print(f"Total base cost: ${total_base_cost}")
+    print(f"Insurance discount: {discount_percent}% (${discount_amount:.2f})")
+    print(f"Total final cost: ${total_final_cost:.2f}")
+
     print("\nPatient Treatment Cost Records:")
     print("-" * 50)
     for pid, treatments in hospital_data["treatment_costs"].items():
         print(f"Patient ID: {pid}")
-        for i in range(len(treatments)):
+        patient_total = sum(t["cost"] for t in treatments)
+        for i, treatment in enumerate(treatments):
             print(f"  Treatment {i+1}:")
-            print(f"    Plan      : {treatments[i]['treatment']}")
-            print(f"    Final Cost: ${treatments[i]['cost']}")
-            print(f"    Insurance : {treatments[i]['insurance']}")
+            print(f"    Plan      : {treatment['treatment']}")
+            print(f"    Final Cost: ${treatment['cost']}")
+            print(f"    Insurance : {treatment['insurance']}")
+        print(f"  Total for Patient: ${patient_total:.2f}")
         print("-" * 50)
 
 
