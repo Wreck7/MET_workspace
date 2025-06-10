@@ -10,6 +10,16 @@ hospital_data = {
             "insurance_name": "Expert Pvt Ltd",
             "insurance_id": "HPL7707",
         },
+        "2": {
+            "patient_id": "2",
+            "name": "Draco Malfoy",
+            "age": "25",
+            "gender": "Male",
+            "medical_history": ["High BP", "appendix"],
+            "blood_group": "A+",
+            "insurance_name": "Joy Pvt Ltd",
+            "insurance_id": "J8493",
+        },
     },
     "staff": {
         "1": {

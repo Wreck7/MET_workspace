@@ -5,7 +5,7 @@ def generate_patient_report(patient_id, report_type):
     if patient_id not in hospital_data["patients"]:
         return "Patient ID not found."
 
-    report_id = "REP" + str(len(hospital_data["reports"]) + 1).zfill(3)
+    report_id = "REPORT" + str(len(hospital_data["reports"]) + 1)
     patient_name = hospital_data["patients"][patient_id]["name"]
     report_date = input("Enter report date (YYYY-MM-DD): ").strip()
     doctor_id = input("Enter doctor ID: ").strip()
@@ -15,8 +15,8 @@ def generate_patient_report(patient_id, report_type):
 
     num_entries = int(input("Enter number of detail entries in report: "))
     details = {}
-    for _ in range(num_entries):
-        key = input("Enter detail name (e.g., Hemoglobin, Findings): ").strip()
+    for i in range(num_entries):
+        key = input("Enter detail name (e.g., Hemoglobin, Blood Pressure): ").strip()
         value = input(f"Enter value for {key}: ").strip()
         details[key] = value
     remarks = input("Enter doctor's remarks: ").strip()
