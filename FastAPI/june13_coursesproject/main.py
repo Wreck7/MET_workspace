@@ -34,3 +34,24 @@ def update_users(user_id, course_id):
     res = db.table('users').update(data).eq('id', user_id).execute()
     return res.data
 
+
+@app.delete('/users')
+def delete_users(id):
+    res = db.table('users').delete().eq('id', id).execute()
+    return res.data
+
+
+@app.get('/courses')
+def get_courses():
+    res = db.table('courses').select('*').execute()
+    return res.data
+
+@app.post('/courses')
+def post_courses(name, description, duration):
+    data = {
+        'name': name, 
+        'description': description, 
+        'duration': duration
+    }
+    res = db.table('courses').insert(data).execute()
+    return res
