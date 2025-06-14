@@ -55,3 +55,19 @@ def post_courses(name, description, duration):
     }
     res = db.table('courses').insert(data).execute()
     return res
+
+
+@app.put('/courses')
+def update_courses(description, duration, id):
+    data = {
+        'description': description, 
+        'duration': duration
+    }
+    res = db.table('courses').update(data).eq('id', id).execute()
+    return res.data
+
+
+@app.delete('/courses')
+def delete_courses(id):
+    res = db.table('courses').delete().eq('id', id).execute()
+    return res.data
