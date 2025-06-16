@@ -10,6 +10,23 @@ db = create_client(db_url, db_api)
 app = FastAPI()
 
 
+@app.post('/register')
+def register(username, email, name, age, password):
+    # check = db.table('register').select('*').eq('username', username).eq('email', email).execute()
+    check = db.table('register').select('*').or_(f"username.eq.{username},email.eq.{email}").execute()
+    if check.data:
+        return False
+    else:
+        data = {
+            'name': name,
+            'email': email,
+            'username': username,
+            'password': password,
+            'age': age
+        }
+        res = db.table('register').insert(data).execute()
+        return True
+
 @app.get('/users')
 def get_users():
     res = db.table('users').select('*').execute()
