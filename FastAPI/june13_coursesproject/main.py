@@ -11,7 +11,7 @@ app = FastAPI()
 
 
 @app.post('/register')
-def register(username, email, name, age, password):
+def register(username, email, name, age, password, gender):
     # check = db.table('register').select('*').eq('username', username).eq('email', email).execute()
     check = db.table('register').select('*').or_(f"username.eq.{username},email.eq.{email}").execute()
     if check.data:
@@ -22,7 +22,8 @@ def register(username, email, name, age, password):
             'email': email,
             'username': username,
             'password': password,
-            'age': age
+            'age': age,
+            'gender': gender
         }
         res = db.table('register').insert(data).execute()
         return True
