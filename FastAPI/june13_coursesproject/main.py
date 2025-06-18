@@ -89,3 +89,5 @@ def update_courses(description, duration, id):
 def delete_courses(id):
     res = db.table('courses').delete().eq('id', id).execute()
     return res.data
+
+# comment! :)
