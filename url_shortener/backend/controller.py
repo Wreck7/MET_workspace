@@ -19,7 +19,7 @@ def rand_str(length):
 
 
 
-@router.post('/')
+@router.post('/shorten')
 def url_getter(long_url):
     res = db.table('urls').insert({"long_url": long_url, "phrase": rand_str(7)}).execute()
     return "http://127.0.0.1:8000/" + res.data[0]['phrase']
