@@ -100,4 +100,49 @@
 # ➤ Check if a number is prime, or print all primes up to n.
 
 
+# def is_prime(n):
+#     if n <= 1:
+#         return False
+#     for i in range(2, int(n**0.5) + 1):  # check up to sqrt(n)
+#         if n % i == 0:
+#             return False
+#     return True
+
+# num = int(input("Enter a number: "))
+# if is_prime(num):
+#     print(f"{num} is a prime number.")
+# else:
+#     print(f"{num} is not a prime number.")
+
+
+
+# 8) Reverse a List
+# ➤ Given a list, reverse it without using reverse().
+
+
+# arr = [1,2,3,4,5,6]
+# reversed_arr = []
+
+# for i in arr:
+#     reversed_arr.insert(0,i)
+# print(reversed_arr)
+
+
+# 9) Find Duplicates in a List
+# ➤ Identify and print duplicate values from a list.
+
+
+# arr = [1,2,1,3,4,5,3,6]
+# seen = set()
+# duplicates = set()
+
+# for i in arr:
+#     if i in seen:
+#         duplicates.add(i)
+#     else:
+#         seen.add(i)
+        
+# print(duplicates)
+
+
 
