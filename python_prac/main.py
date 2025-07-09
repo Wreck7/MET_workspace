@@ -146,3 +146,29 @@
 
 
 
+
+# str = 'swiss'
+
+# for i in str:
+#     if str.count(i) == 1:
+#         print(i)
+#         break
+
+
+
+# s = 'crypt'
+
+# vowels = set('aeiou')
+
+# def vowel_check(s):
+#     for i in range(len(s)):
+#         if s[i] in vowels:
+#             return i
+#     return -1
+
+# first_index = vowel_check(s)
+# if first_index == -1:
+#     print(f'no vowels found!')
+# else:
+#     print(f'first vowel index {first_index}')
+        
