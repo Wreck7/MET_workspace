@@ -171,4 +171,46 @@
 #     print(f'no vowels found!')
 # else:
 #     print(f'first vowel index {first_index}')
-        
+
+
+
+# s = 'education'
+
+# arr = list(s)
+# def moving_vowels(arr):
+#     vowels = set('aeiou')
+#     for i in arr:
+#         if i in vowels:
+#             arr.remove(i)
+#             arr.append(i)
+#     arr = ''.join(arr)
+#     return arr
+
+# print(moving_vowels(arr))
+
+
+
+
+# s = 'mysecretpassword1234'
+
+# masked = '*' * (len(s) - 4) + s[-4:]
+# print(masked)
+
+
+
+# s = 'python'
+# staircase = '\n'.join(s)
+# print(staircase)
+
+
+
+
+num = int(input("Enter a number: "))
+rev = 0
+
+while num != 0:
+    digit = num % 10
+    rev = rev * 10 + digit
+    num = num // 10
+
+print("Reversed number:", rev)
