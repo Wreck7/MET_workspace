@@ -205,12 +205,33 @@
 
 
 
-num = int(input("Enter a number: "))
-rev = 0
+# num = int(input("Enter a number: "))
+# rev = 0
 
-while num != 0:
-    digit = num % 10
-    rev = rev * 10 + digit
-    num = num // 10
+# while num != 0:
+#     digit = num % 10
+#     rev = rev * 10 + digit
+#     num = num // 10
 
-print("Reversed number:", rev)
+# print("Reversed number:", rev)
+
+
+
+
+# def reverse_sentence(sentence):
+#     words = sentence.split()
+
+#     def helper(index):
+#         if index == len(words) - 1:
+#             return words[index]
+#         return helper(index + 1) + " " + words[index]
+
+#     return helper(0)
+
+# # Example usage
+# sentence = input("Enter a sentence: ")
+# reversed_sentence = reverse_sentence(sentence)
+# print("Reversed sentence:", reversed_sentence)
+
+
+
