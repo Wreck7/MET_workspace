@@ -21,7 +21,7 @@
 # print(count)
 
 
-# 2) Palindrome Checker
+# 2) Palindrome Checker.!
 # ➤ Check if a string is a palindrome (reads the same backward).
 # Example: "madam" → YES
 
