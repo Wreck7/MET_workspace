@@ -236,4 +236,5 @@
 # print("Reversed sentence:", reversed_sentence)
 
 
-
+for i in range(11):
+    print(i)
