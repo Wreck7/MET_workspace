@@ -1,5 +1,5 @@
+# question1
 # animals = ['cat', 'dog', 'monkey', 'cow']
-
 # for i in range(len(animals)):
 #     current = animals[i]
 #     next_animal = animals[(i + 1) % len(animals)]  # wraps around
@@ -236,5 +236,5 @@
 # print("Reversed sentence:", reversed_sentence)
 
 
-for i in range(11):
-    print(i)
+# for i in range(11):
+#     print(i)
