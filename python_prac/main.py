@@ -238,3 +238,8 @@
 
 # for i in range(11):
 #     print(i)
+
+
+
+
+#  javascript is way better than python
