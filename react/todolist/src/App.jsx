@@ -19,24 +19,26 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>My Todo App</h1>
-      <TodoForm
-        addTodo={(text) => {
-          const newTodo = {
-            id: Date.now(),
-            text,
-            completed: false,
-          };
-          setTodos([newTodo, ...todos]);
-        }}
-      />
+    <div className="app">
+      <div className="container">
+        <h1>My Todo App</h1>
+        <TodoForm
+          addTodo={(text) => {
+            const newTodo = {
+              id: Date.now(),
+              text,
+              completed: false,
+            };
+            setTodos([newTodo, ...todos]);
+          }}
+        />
 
       <TodoList
         todos={todos}
         toggleComplete={toggleComplete}
         deleteTodo={deleteTodo}
-      />
+        />
+        </div>
     </div>
   );
 }

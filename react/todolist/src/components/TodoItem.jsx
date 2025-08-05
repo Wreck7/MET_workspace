@@ -1,4 +1,7 @@
 import React from "react";
+import "../App.css";
+
+
 
 const TodoItem = ({ todo, toggleComplete, deleteTodo }) => {
   return (
