@@ -8,22 +8,21 @@ function App() {
   const [users, setUsers] = useState([
     { username: "tejas", password: "tejas@1234", id: 1 },
   ]);
-  const [updatableUser, setUpdatableUser] = useState()
+  const [updatableUser, setUpdatableUser] = useState();
   function getInfo(user) {
     const newUser = { ...user, id: Date.now() };
     setUsers([newUser, ...users]);
-    setUpdatableUser(null)
+    setUpdatableUser(null);
   }
 
   function onDelete(id) {
-    setUsers(prev => prev.filter(user => user.id !== id))
-    
+    setUsers((prev) => prev.filter((user) => user.id !== id));
   }
-  
+
   function onUpdate(id) {
-    const userToUpdate = users.find(user => user.id === id);
+    const userToUpdate = users.find((user) => user.id === id);
     setUpdatableUser(userToUpdate);
-    setUsers(prev => prev.filter(user => user.id !== id));
+    setUsers((prev) => prev.filter((user) => user.id !== id));
   }
 
   return (
