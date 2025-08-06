@@ -13,7 +13,7 @@
   flex-direction: column;
   margin: 50px;
   border: 2px solid red;
-  height: 500px;
+  height: 400px;
   width: 500px;
-  
+  border-radius: 14px;
 }
