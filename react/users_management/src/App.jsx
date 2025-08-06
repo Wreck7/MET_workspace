@@ -145,7 +145,7 @@ function App() {
           </div>
           <div className="col-md-6">
             {
-              editIndex === null ? <AddUserForm onAddUser={handleAddUser} editIndex={editIndex} /> :
+              editIndex === null ? <AddUserForm onAddUser={handleAddUser} /> :
               <EditUserForm  onSave={handleSaveUser} user={users[editIndex]} />
             }
           </div>
