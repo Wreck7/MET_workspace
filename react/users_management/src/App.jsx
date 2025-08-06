@@ -15,7 +15,7 @@ function Header() {
   );
 }
 
-function AddUserForm({ onAddUser, editIndex }) {
+function AddUserForm({ onAddUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,7 +28,7 @@ function AddUserForm({ onAddUser, editIndex }) {
 
   return (
     <div className="card p-3">
-      <h5>{editIndex == null ? "Add User" : "Edit User"}</h5>
+      <h5>Add User</h5>
       <form onSubmit={handleSubmit}>
         <input
           className="form-control mb-2"
@@ -72,13 +72,13 @@ function UserCardList({ users, onDelete, onEdit }) {
   );
 }
 
-const EditUserForm = ({ onAddUser, editIndex }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const EditUserForm = ({ onSave, user }) => {
+  const [username, setUsername] = useState(user.username);
+  const [password, setPassword] = useState(user.password);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddUser({ username, password });
+    onSave({ username, password });
     setUsername("");
     setPassword("");
   };
@@ -110,7 +110,6 @@ const EditUserForm = ({ onAddUser, editIndex }) => {
 function App() {
   const [users, setUsers] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
-  // const [mode, setMode] = useState(0);
 
   const handleAddUser = (user) => {
     setUsers([user, ...users]);
@@ -125,11 +124,12 @@ function App() {
     setEditIndex(indexToEdit);
   };
 
-  // function onUpdate(id) {
-  //   const userToUpdate = users[editIndex];
-  //   setUpdatableUser(userToUpdate);
-  //   setUsers((prev) => prev.filter((user) => user.id !== id));
-  // }
+  const handleSaveUser = (user) => {
+    users[editIndex] = user
+    setUsers(users)
+    setEditIndex(null)
+  };
+
 
   return (
     <>
@@ -145,8 +145,8 @@ function App() {
           </div>
           <div className="col-md-6">
             {
-              editIndex == null ? <AddUserForm onAddUser={handleAddUser} editIndex={editIndex} /> :
-              <EditUserForm  onAddUser={handleAddUser} editIndex={editIndex} />
+              editIndex === null ? <AddUserForm onAddUser={handleAddUser} editIndex={editIndex} /> :
+              <EditUserForm  onSave={handleSaveUser} user={users[editIndex]} />
             }
           </div>
         </div>
