@@ -49,7 +49,10 @@ const OneTodo = ({ index, getIndex }) => {
   }, []);
 
   return (
-    <div>
+    <div className="container py-5">
+      <button onClick={() => getIndex(null)}>
+        Close
+      </button>
       <table className="table">
         <thead>
           <tr>
@@ -63,7 +66,6 @@ const OneTodo = ({ index, getIndex }) => {
           <tr
             className="cursor-pointer"
             key={todo.id}
-            onClick={() => getIndex(null)}
           >
             <td>{todo.id}</td>
             <td>{todo.todo}</td>
