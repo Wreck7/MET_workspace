@@ -23,8 +23,8 @@ function App() {
     setTodos([newTodo, ...todos]);
   };
 
-  const deleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const deleteTodo = (index) => {
+    setTodos(todos.filter((todo, i) => i !== index));
   };
 
   const getEditID = (id) => {
